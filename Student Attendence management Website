@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📋 Student Attendance Dashboard</h1>
+            <p id="current-date"></p>
+        </header>
+
+        <section class="form-section">
+            <form id="student-form">
+                <input type="text" id="student-name" placeholder="Enter Student Name" required>
+                <input type="text" id="student-roll" placeholder="Enter Roll Number" required>
+                <button type="submit">Add Student</button>
+            </form>
+        </section>
+
+        <section class="table-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Roll No.</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="student-list">
+                    </tbody>
+            </table>
+        </section>
+
+        <section class="summary-section">
+            <div class="card total">
+                <h3>Total Students</h3>
+                <p id="total-count">0</p>
+            </div>
+            <div class="card present">
+                <h3>Present</h3>
+                <p id="present-count">0</p>
+            </div>
+            <div class="card absent">
+                <h3>Absent</h3>
+                <p id="absent-count">0</p>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+:root {
+    --primary: #4f46e5;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --background: #f8fafc;
+    --surface: #ffffff;
+    --text: #1e293b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text);
+    padding: 2rem 1rem;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+header h1 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+#current-date {
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* Form Styling */
+.form-section {
+    background: var(--surface);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+#student-form {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+#student-form input {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.75rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+#student-form button {
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#student-form button:hover {
+    background-color: #4338ca;
+}
+
+/* Table Styling */
+.table-section {
+    background: var(--surface);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+    margin-bottom: 2rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th, td {
+    padding: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+th {
+    background-color: #f1f5f9;
+    font-weight: 600;
+}
+
+/* Attendance Toggle Buttons */
+.status-btn {
+    padding: 0.4rem 1rem;
+    border: 2px solid #cbd5e1;
+    background: transparent;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-right: 0.5rem;
+    transition: all 0.2s;
+}
+
+.status-btn.present-btn:hover, .status-btn.present-btn.active {
+    background-color: var(--success);
+    border-color: var(--success);
+    color: white;
+}
+
+.status-btn.absent-btn:hover, .status-btn.absent-btn.active {
+    background-color: var(--danger);
+    border-color: var(--danger);
+    color: white;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+.delete-btn:hover {
+    color: var(--danger);
+}
+
+/* Summary Dashboard */
+.summary-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    background: var(--surface);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #cbd5e1;
+}
+
+.card h3 {
+    font-size: 1rem;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+}
+
+.card p {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.card.total { border-top-color: var(--primary); }
+.card.present { border-top-color: var(--success); p { color: var(--success); } }
+.card.absent { border-top-color: var(--danger); p { color: var(--danger); } }
+
+// Global State Management
+let students = JSON.parse(localStorage.getItem('attendanceStudents')) || [];
+
+// DOM Elements
+const studentForm = document.getElementById('student-form');
+const studentNameInput = document.getElementById('student-name');
+const studentRollInput = document.getElementById('student-roll');
+const studentList = document.getElementById('student-list');
+const currentDateEl = document.getElementById('current-date');
+
+const totalCountEl = document.getElementById('total-count');
+const presentCountEl = document.getElementById('present-count');
+const absentCountEl = document.getElementById('absent-count');
+
+// Display Current Date
+const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+currentDateEl.textContent = new Date().toLocaleDateString('en-US', options);
+
+// Initialize App
+function init() {
+    renderStudents();
+    updateSummary();
+}
+
+// Add Student Handler
+studentForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const name = studentNameInput.value.trim();
+    const roll = studentRollInput.value.trim();
+
+    // Prevent duplicate roll numbers
+    if (students.some(student => student.roll === roll)) {
+        alert('A student with this Roll Number already exists!');
+        return;
+    }
+
+    const newStudent = {
+        id: Date.now().toString(),
+        name: name,
+        roll: roll,
+        status: 'absent' // Default status
+    };
+
+    students.push(newStudent);
+    saveAndRefresh();
+    
+    // Clear Form inputs
+    studentNameInput.value = '';
+    studentRollInput.value = '';
+});
+
+// Update Status (Present / Absent)
+function toggleStatus(id, newStatus) {
+    students = students.map(student => {
+        if (student.id === id) {
+            return { ...student, status: newStatus };
+        }
+        return student;
+    });
+    saveAndRefresh();
+}
+
+// Delete Student
+function deleteStudent(id) {
+    if(confirm("Are you sure you want to remove this student?")) {
+        students = students.filter(student => student.id !== id);
+        saveAndRefresh();
+    }
+}
+
+// Save to LocalStorage and update UI
+function saveAndRefresh() {
+    localStorage.setItem('attendanceStudents', JSON.stringify(students));
+    renderStudents();
+    updateSummary();
+}
+
+// Render the Roster to Table
+function renderStudents() {
+    studentList.innerHTML = '';
+
+    if (students.length === 0) {
+        studentList.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#94a3b8;">No students registered yet.</td></tr>`;
+        return;
+    }
+
+    students.forEach(student => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+            <td><strong>${student.roll}</strong></td>
+            <td>${student.name}</td>
+            <td>
+                <button class="status-btn present-btn ${student.status === 'present' ? 'active' : ''}" onclick="toggleStatus('${student.id}', 'present')">Present</button>
+                <button class="status-btn absent-btn ${student.status === 'absent' ? 'active' : ''}" onclick="toggleStatus('${student.id}', 'absent')">Absent</button>
+            </td>
+            <td>
+                <button class="delete-btn" onclick="deleteStudent('${student.id}')" title="Delete Student">🗑️</button>
+            </td>
+        `;
+        studentList.appendChild(row);
+    });
+}
+
+// Recalculate Dashboard Stats
+function updateSummary() {
+    const total = students.length;
+    const present = students.filter(s => s.status === 'present').length;
+    const absent = total - present;
+
+    totalCountEl.textContent = total;
+    presentCountEl.textContent = present;
+    absentCountEl.textContent = absent;
+}
+
+// Run app on load
+init();
+
+
+
+
