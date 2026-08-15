@@ -1,7 +1,5 @@
-// Global State Management
 let students = JSON.parse(localStorage.getItem('attendanceStudents')) || [];
 
-// DOM Elements
 const studentForm = document.getElementById('student-form');
 const studentNameInput = document.getElementById('student-name');
 const studentRollInput = document.getElementById('student-roll');
@@ -12,24 +10,20 @@ const totalCountEl = document.getElementById('total-count');
 const presentCountEl = document.getElementById('present-count');
 const absentCountEl = document.getElementById('absent-count');
 
-// Display Current Date
 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 currentDateEl.textContent = new Date().toLocaleDateString('en-US', options);
 
-// Initialize App
 function init() {
     renderStudents();
     updateSummary();
 }
 
-// Add Student Handler
 studentForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
     const name = studentNameInput.value.trim();
     const roll = studentRollInput.value.trim();
 
-    // Prevent duplicate roll numbers
     if (students.some(student => student.roll === roll)) {
         alert('A student with this Roll Number already exists!');
         return;
@@ -45,12 +39,10 @@ studentForm.addEventListener('submit', (e) => {
     students.push(newStudent);
     saveAndRefresh();
     
-    // Clear Form inputs
     studentNameInput.value = '';
     studentRollInput.value = '';
 });
 
-// Update Status (Present / Absent)
 function toggleStatus(id, newStatus) {
     students = students.map(student => {
         if (student.id === id) {
@@ -61,7 +53,6 @@ function toggleStatus(id, newStatus) {
     saveAndRefresh();
 }
 
-// Delete Student
 function deleteStudent(id) {
     if(confirm("Are you sure you want to remove this student?")) {
         students = students.filter(student => student.id !== id);
@@ -69,14 +60,12 @@ function deleteStudent(id) {
     }
 }
 
-// Save to LocalStorage and update UI
 function saveAndRefresh() {
     localStorage.setItem('attendanceStudents', JSON.stringify(students));
     renderStudents();
     updateSummary();
 }
 
-// Render the Roster to Table
 function renderStudents() {
     studentList.innerHTML = '';
 
@@ -103,7 +92,6 @@ function renderStudents() {
     });
 }
 
-// Recalculate Dashboard Stats
 function updateSummary() {
     const total = students.length;
     const present = students.filter(s => s.status === 'present').length;
@@ -114,5 +102,4 @@ function updateSummary() {
     absentCountEl.textContent = absent;
 }
 
-// Run app on load
 init();
