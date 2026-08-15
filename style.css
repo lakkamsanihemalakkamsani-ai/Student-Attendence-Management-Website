@@ -40,7 +40,6 @@ header h1 {
     font-weight: 500;
 }
 
-/* Form Styling */
 .form-section {
     background: var(--surface);
     padding: 1.5rem;
@@ -79,7 +78,6 @@ header h1 {
     background-color: #4338ca;
 }
 
-/* Table Styling */
 .table-section {
     background: var(--surface);
     border-radius: 8px;
@@ -104,7 +102,6 @@ th {
     font-weight: 600;
 }
 
-/* Attendance Toggle Buttons */
 .status-btn {
     padding: 0.4rem 1rem;
     border: 2px solid #cbd5e1;
@@ -140,7 +137,6 @@ th {
     color: var(--danger);
 }
 
-/* Summary Dashboard */
 .summary-section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
